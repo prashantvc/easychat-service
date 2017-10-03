@@ -38,7 +38,7 @@ namespace easychat
                     break;
 
                 var message = await GetMessageAsync(socket, token);
-                System.Console.WriteLine($"Received message - {message} from {socket}");
+                System.Console.WriteLine($"Received message - {message} at {DateTime.Now}");
 
                 if (string.IsNullOrEmpty(message))
                 {
@@ -60,28 +60,24 @@ namespace easychat
 
         async Task<string> GetMessageAsync(WebSocket socket, CancellationToken token)
         {
-            using (var memoryStream = new MemoryStream())
+            WebSocketReceiveResult result;
+            var message = new ArraySegment<byte>(new byte[4096]);
+            string receivedMessage = string.Empty;
+
+            do
             {
-                WebSocketReceiveResult result;
-                var message = new ArraySegment<byte>(new byte[4096]);
+                token.ThrowIfCancellationRequested();
 
-                do
-                {
-                    token.ThrowIfCancellationRequested();
+                result = await socket.ReceiveAsync(message, token);
+                var messageBytes = message.Skip(message.Offset).Take(result.Count).ToArray();
+                receivedMessage = Encoding.UTF8.GetString(messageBytes);
 
-                    result = await socket.ReceiveAsync(message, token);
-                    memoryStream.Write(message.Array, message.Offset, result.Count);
+            } while (!result.EndOfMessage);
 
-                } while (!result.EndOfMessage);
+            if (result.MessageType != WebSocketMessageType.Text)
+                return null;
 
-                memoryStream.Seek(0, SeekOrigin.Begin);
-
-                if (result.MessageType != WebSocketMessageType.Text)
-                    return null;
-
-                using (var reader = new StreamReader(memoryStream, Encoding.UTF8))
-                    return await reader.ReadToEndAsync();
-            }
+            return receivedMessage;
         }
 
         Task SendMessageAsync(WebSocket socket, string message, CancellationToken token)

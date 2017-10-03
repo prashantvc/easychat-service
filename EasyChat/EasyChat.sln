@@ -13,6 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyChat.UWP", "EasyChat\Ea
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		EasyChat\EasyChat\EasyChat.projitems*{0beebf50-69de-4d35-a501-d803c2a1c44d}*SharedItemsImports = 4
 		EasyChat\EasyChat\EasyChat.projitems*{4c737b85-0c05-4127-bf86-516c160a3c27}*SharedItemsImports = 13
 		EasyChat\EasyChat\EasyChat.projitems*{c21b2b5b-7439-422c-ae88-d30630426933}*SharedItemsImports = 4
 		EasyChat\EasyChat\EasyChat.projitems*{c913a816-d238-4f48-bd74-419d82b07904}*SharedItemsImports = 4
