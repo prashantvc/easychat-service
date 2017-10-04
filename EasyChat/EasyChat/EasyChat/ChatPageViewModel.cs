@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Net.WebSockets;
@@ -17,12 +18,14 @@ namespace EasyChat
         {
             client = new ClientWebSocket();
             cts = new CancellationTokenSource();
+            messages = new ObservableCollection<MessageViewModel>();
         }
 
         public bool IsConnected => client.State == WebSocketState.Open;
         public Command Connect => connect ?? (connect = new Command(ConnectToServerAsync));
         public Command SendMessage => sendMessageCommand ?? 
             (sendMessageCommand = new Command<string>(SendMessageAsync, CanSendMessage));
+        public ObservableCollection<MessageViewModel> Messages => messages;
         
         async void ConnectToServerAsync()
         {
@@ -83,5 +86,6 @@ namespace EasyChat
 
         Command connect;
         Command<string> sendMessageCommand;
+        ObservableCollection<MessageViewModel> messages;
     }
 }

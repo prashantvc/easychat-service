@@ -1,15 +1,29 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             Title="Easy Chat"
-             x:Class="EasyChat.ChatPage">
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" Title="Easy Chat" x:Class="EasyChat.ChatPage" 
+    xmlns:local="clr-namespace:EasyChat;assembly=EasyChat.Android">
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <local:MyDataTemplateSelector x:Key="MessageTemplateSelector"></local:MyDataTemplateSelector>
+    </ResourceDictionary>
+  </ContentPage.Resources>
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Connect" Command="{Binding Connect}"/>
+        <ToolbarItem Text="Connect" Command="{Binding Connect}" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin Forms!" />
-            <Button Text="Send" Command="{Binding SendMessage}"/>
-        </StackLayout>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <ListView Grid.Row="0" HasUnevenRows="true"
+                SeparatorVisibility="None"
+                ItemTemplate="{StaticResource MessageTemplateSelector}" 
+                ItemsSource="{Binding Messages}"/>
+
+            <StackLayout Grid.Row="1" Orientation="Horizontal">
+                <Entry Placeholder="Message" HorizontalOptions= "FillAndExpand" />
+                <Button Text="Send" Command="{Binding SendMessage}"/>
+            </StackLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>
