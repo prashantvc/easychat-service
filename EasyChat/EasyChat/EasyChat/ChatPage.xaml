@@ -22,8 +22,8 @@
                 ItemTemplate="{StaticResource MessageTemplateSelector}" 
                 ItemsSource="{Binding Messages}"/>
 
-            <StackLayout Grid.Row="1" Orientation="Horizontal">
-                <Entry x:Name="txtMessage" Placeholder="Message" HorizontalOptions= "FillAndExpand" />
+            <StackLayout Grid.Row="1" Orientation="Horizontal" Margin="8,0,8,8">
+                <Entry x:Name="txtMessage" Text="{Binding MessageText, Mode=TwoWay}" Placeholder="Message" HorizontalOptions= "FillAndExpand" />
                 <Button Text="Send" CommandParameter="{Binding Source={x:Reference Name=txtMessage}, Path=Text}"
                     Command="{Binding SendMessage}"/>
             </StackLayout>

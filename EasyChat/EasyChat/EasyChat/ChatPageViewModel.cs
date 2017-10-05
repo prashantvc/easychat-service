@@ -31,6 +31,21 @@ namespace EasyChat
             (sendMessageCommand = new Command<string>(SendMessageAsync, CanSendMessage));
         public ObservableCollection<Message> Messages => messages;
 
+        public string MessageText
+        {
+            get
+            {
+                return messageText;
+            }
+            set
+            {
+                messageText = value;
+                OnPropertyChanged();
+
+                sendMessageCommand.ChangeCanExecute();
+            }
+        }
+
         async void ConnectToServerAsync()
         {
             
@@ -78,9 +93,6 @@ namespace EasyChat
 
         async void SendMessageAsync(string message)
         {
-            if (!CanSendMessage(message) && !string.IsNullOrEmpty(message))
-                return;
-
             var msg = new Message
             {
                 Name = userName,
@@ -95,11 +107,12 @@ namespace EasyChat
             var segmnet = new ArraySegment<byte>(byteMessage);
 
             await client.SendAsync(segmnet, WebSocketMessageType.Text, true, cts.Token);
+            MessageText = string.Empty;
         }
 
         bool CanSendMessage(string message)
         {
-            return IsConnected;
+            return IsConnected && !string.IsNullOrEmpty(message);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -116,5 +129,6 @@ namespace EasyChat
         Command connect;
         Command<string> sendMessageCommand;
         ObservableCollection<Message> messages;
+        string messageText;
     }
 }
