@@ -15,7 +15,7 @@ namespace EasyChat
 
 		protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
 		{
-			var messageVm = item as MessageViewModel;
+			var messageVm = item as Message;
 			if (messageVm == null)
 				return null;
 			return messageVm.IsIncoming ? this.incomingDataTemplate : this.outgoingDataTemplate;

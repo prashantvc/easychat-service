@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using Plugin.DeviceInfo;
+using Newtonsoft.Json;
 
 namespace EasyChat
 {
@@ -18,14 +20,16 @@ namespace EasyChat
         {
             client = new ClientWebSocket();
             cts = new CancellationTokenSource();
-            messages = new ObservableCollection<MessageViewModel>();
+            messages = new ObservableCollection<Message>();
+
+            userName = "Prashant";
         }
 
         public bool IsConnected => client.State == WebSocketState.Open;
         public Command Connect => connect ?? (connect = new Command(ConnectToServerAsync));
         public Command SendMessage => sendMessageCommand ??
             (sendMessageCommand = new Command<string>(SendMessageAsync, CanSendMessage));
-        public ObservableCollection<MessageViewModel> Messages => messages;
+        public ObservableCollection<Message> Messages => messages;
 
         async void ConnectToServerAsync()
         {
@@ -48,8 +52,17 @@ namespace EasyChat
                     {
                         result = await client.ReceiveAsync(message, cts.Token);
                         var messageBytes = message.Skip(message.Offset).Take(result.Count).ToArray();
-                        string receivedMessage = Encoding.UTF8.GetString(messageBytes);
-                        Console.WriteLine("Received: {0}", receivedMessage);
+                        string serialisedMessae = Encoding.UTF8.GetString(messageBytes);
+
+                        try
+                        {
+                            var msg = JsonConvert.DeserializeObject<Message>(serialisedMessae);
+                            Messages.Add(msg);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Invalide message format. {ex.Message}");
+                        }
 
                     } while (!result.EndOfMessage);
                 }
@@ -68,7 +81,17 @@ namespace EasyChat
             if (!CanSendMessage(message) && !string.IsNullOrEmpty(message))
                 return;
 
-            var byteMessage = Encoding.UTF8.GetBytes(message + DateTime.Now.ToString());
+            var msg = new Message
+            {
+                Name = userName,
+                MessagDateTime = DateTime.Now,
+                Text = message,
+                UserId = CrossDeviceInfo.Current.Id
+            };
+
+            string serialisedMessage = JsonConvert.SerializeObject(msg);
+
+            var byteMessage = Encoding.UTF8.GetBytes(serialisedMessage);
             var segmnet = new ArraySegment<byte>(byteMessage);
 
             await client.SendAsync(segmnet, WebSocketMessageType.Text, true, cts.Token);
@@ -88,9 +111,10 @@ namespace EasyChat
 
         readonly ClientWebSocket client;
         readonly CancellationTokenSource cts;
+        readonly string userName;
 
         Command connect;
         Command<string> sendMessageCommand;
-        ObservableCollection<MessageViewModel> messages;
+        ObservableCollection<Message> messages;
     }
 }

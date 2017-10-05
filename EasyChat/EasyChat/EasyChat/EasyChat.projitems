@@ -27,7 +27,7 @@
       <DependentUpon>..\..\..\..\..\..\Downloads\Xamarin.Forms-Samples-master\DataTemplateSelector\DataTemplateSelector\DataTemplateSelector\CustomCells\OutgoingViewCell.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)ChatDataTemplateSelector.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MessageViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Message.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)MainPage.xaml">
