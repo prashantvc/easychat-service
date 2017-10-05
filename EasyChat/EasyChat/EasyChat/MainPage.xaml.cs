@@ -20,15 +20,7 @@ namespace EasyChat
                 return;
             }
 
-            await Navigation.PushAsync(new ChatPage());
-
-
-         //   var client = new ClientWebSocket();
-	        //var token = new CancellationToken();
-
-	        //await client.ConnectAsync(new Uri("ws://10.0.2.2:5000"), token);
-
-	        //Console.WriteLine($"Websocket state {client.State}");
+            await Navigation.PushAsync(new ChatPage(UserName.Text));
         }
 	}
 }

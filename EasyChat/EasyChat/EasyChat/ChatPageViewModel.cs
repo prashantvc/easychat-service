@@ -16,19 +16,22 @@ namespace EasyChat
     public sealed class ChatPageViewModel : INotifyPropertyChanged
     {
 
-        public ChatPageViewModel()
+        public ChatPageViewModel(string username)
         {
             client = new ClientWebSocket();
             cts = new CancellationTokenSource();
             messages = new ObservableCollection<Message>();
 
-            userName = "Prashant";
+            this.username = username;
+
+            ConnectToServerAsync();
         }
 
         public bool IsConnected => client.State == WebSocketState.Open;
-        public Command Connect => connect ?? (connect = new Command(ConnectToServerAsync));
+
         public Command SendMessage => sendMessageCommand ??
             (sendMessageCommand = new Command<string>(SendMessageAsync, CanSendMessage));
+
         public ObservableCollection<Message> Messages => messages;
 
         public string MessageText
@@ -95,7 +98,7 @@ namespace EasyChat
         {
             var msg = new Message
             {
-                Name = userName,
+                Name = username,
                 MessagDateTime = DateTime.Now,
                 Text = message,
                 UserId = CrossDeviceInfo.Current.Id
@@ -124,9 +127,9 @@ namespace EasyChat
 
         readonly ClientWebSocket client;
         readonly CancellationTokenSource cts;
-        readonly string userName;
+        readonly string username;
 
-        Command connect;
+
         Command<string> sendMessageCommand;
         ObservableCollection<Message> messages;
         string messageText;

@@ -14,7 +14,7 @@ namespace EasyChat
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new ChatPage());
+            MainPage = new NavigationPage(new MainPage());
         }
 
         protected override void OnStart()

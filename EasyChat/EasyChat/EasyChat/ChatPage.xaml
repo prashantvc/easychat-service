@@ -1,32 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" Title="Easy Chat" x:Class="EasyChat.ChatPage" 
-    xmlns:local="clr-namespace:EasyChat" 
-    >
-  <ContentPage.Resources>
-    <ResourceDictionary>
-      <local:MyDataTemplateSelector x:Key="MessageTemplateSelector"></local:MyDataTemplateSelector>
-    </ResourceDictionary>
-  </ContentPage.Resources>
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Connect" Command="{Binding Connect}" />
-    </ContentPage.ToolbarItems>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" Title="Easy Chat" x:Class="EasyChat.ChatPage" xmlns:local="clr-namespace:EasyChat">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:MyDataTemplateSelector x:Key="MessageTemplateSelector">
+            </local:MyDataTemplateSelector>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <ListView Grid.Row="0" HasUnevenRows="true"
-                SeparatorVisibility="None"
-                ItemTemplate="{StaticResource MessageTemplateSelector}" 
-                ItemsSource="{Binding Messages}"/>
-
-            <StackLayout Grid.Row="1" Orientation="Horizontal" Margin="8,0,8,8">
-                <Entry x:Name="txtMessage" Text="{Binding MessageText, Mode=TwoWay}" Placeholder="Message" HorizontalOptions= "FillAndExpand" />
-                <Button Text="Send" CommandParameter="{Binding Source={x:Reference Name=txtMessage}, Path=Text}"
-                    Command="{Binding SendMessage}"/>
-            </StackLayout>
-        </Grid>
+        <RelativeLayout>
+            <ListView Grid.Row="0" x:Name="MessagesListView" HasUnevenRows="true" SeparatorVisibility="None" ItemTemplate="{StaticResource MessageTemplateSelector}" ItemsSource="{Binding Messages}" RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height,Factor=1,Constant=0}" />
+            <Grid x:Name="MessageControls" RowSpacing="1" ColumnSpacing="2" Padding="5" BackgroundColor="#EFEFF4" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToView, ElementName=MessagesListView, Property=Height,Factor=.91,Constant=0}" RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width,Factor=1,Constant=0}" RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToView, ElementName=MessagesListView, Property=Height,Factor=.09,Constant=0}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*">
+                    </ColumnDefinition>
+                    <ColumnDefinition Width="Auto">
+                    </ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Entry Grid.Column="0" HeightRequest="25" Placeholder="Message" x:Name="txtMessage" Text="{Binding MessageText, Mode=TwoWay}" />
+                <Button Grid.Column="1" Text="Send" CommandParameter="{Binding Source={x:Reference Name=txtMessage}, Path=Text}" Command="{Binding SendMessage}" />
+            </Grid>
+        </RelativeLayout>
     </ContentPage.Content>
 </ContentPage>

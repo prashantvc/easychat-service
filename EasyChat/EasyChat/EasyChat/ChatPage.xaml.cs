@@ -14,10 +14,11 @@ namespace EasyChat
 	{
 	    ChatPageViewModel vm;
 
-	    public ChatPage ()
+	    public ChatPage (string username)
 		{
 			InitializeComponent ();
-		    BindingContext = vm = new ChatPageViewModel();
+
+            BindingContext = vm = new ChatPageViewModel(username);
 		}
     }
 }

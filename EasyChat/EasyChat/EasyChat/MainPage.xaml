@@ -4,8 +4,9 @@
              Title ="Easy Chat - Sign up"
              x:Class="EasyChat.MainPage">
 
-    <StackLayout VerticalOptions="Center" HorizontalOptions="CenterAndExpand">
-        <Entry x:Name="UserName"/>
+    <StackLayout VerticalOptions="Center" 
+        HorizontalOptions="CenterAndExpand">
+        <Entry x:Name="UserName" Placeholder="What's your name?" WidthRequest="200"/>
         <Button Text="Signup" Clicked="Button_OnClicked"></Button>
     </StackLayout>
 </ContentPage>
