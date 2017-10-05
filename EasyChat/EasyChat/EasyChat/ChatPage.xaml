@@ -23,8 +23,9 @@
                 ItemsSource="{Binding Messages}"/>
 
             <StackLayout Grid.Row="1" Orientation="Horizontal">
-                <Entry Placeholder="Message" HorizontalOptions= "FillAndExpand" />
-                <Button Text="Send" Command="{Binding SendMessage}"/>
+                <Entry x:Name="txtMessage" Placeholder="Message" HorizontalOptions= "FillAndExpand" />
+                <Button Text="Send" CommandParameter="{Binding Source={x:Reference Name=txtMessage}, Path=Text}"
+                    Command="{Binding SendMessage}"/>
             </StackLayout>
         </Grid>
     </ContentPage.Content>

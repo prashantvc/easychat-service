@@ -63,9 +63,9 @@ namespace EasyChat
             }
         }
 
-        async void SendMessageAsync(string message = "This is test message ")
+        async void SendMessageAsync(string message)
         {
-            if (!CanSendMessage(message))
+            if (!CanSendMessage(message) && !string.IsNullOrEmpty(message))
                 return;
 
             var byteMessage = Encoding.UTF8.GetBytes(message + DateTime.Now.ToString());
