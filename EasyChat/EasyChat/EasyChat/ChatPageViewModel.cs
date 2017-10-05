@@ -23,15 +23,20 @@ namespace EasyChat
 
         public bool IsConnected => client.State == WebSocketState.Open;
         public Command Connect => connect ?? (connect = new Command(ConnectToServerAsync));
-        public Command SendMessage => sendMessageCommand ?? 
+        public Command SendMessage => sendMessageCommand ??
             (sendMessageCommand = new Command<string>(SendMessageAsync, CanSendMessage));
         public ObservableCollection<MessageViewModel> Messages => messages;
-        
+
         async void ConnectToServerAsync()
         {
+            
+#if __IOS__
+            await client.ConnectAsync(new Uri("ws://localhost:5000"), cts.Token);
+#else
             await client.ConnectAsync(new Uri("ws://10.0.2.2:5000"), cts.Token);
+#endif
 
-            UpdateClientState();
+			UpdateClientState();
 
             await Task.Factory.StartNew(async () =>
             {
