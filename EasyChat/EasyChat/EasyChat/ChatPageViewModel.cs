@@ -107,9 +107,9 @@ namespace EasyChat
             string serialisedMessage = JsonConvert.SerializeObject(msg);
 
             var byteMessage = Encoding.UTF8.GetBytes(serialisedMessage);
-            var segmnet = new ArraySegment<byte>(byteMessage);
+            var segment = new ArraySegment<byte>(byteMessage);
 
-            await client.SendAsync(segmnet, WebSocketMessageType.Text, true, cts.Token);
+            await client.SendAsync(segment, WebSocketMessageType.Text, true, cts.Token);
             MessageText = string.Empty;
         }
 
