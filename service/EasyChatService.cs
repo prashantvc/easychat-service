@@ -83,9 +83,9 @@ namespace easychat
         Task SendMessageAsync(WebSocket socket, string message, CancellationToken token)
         {
             var byteMessage = Encoding.UTF8.GetBytes(message);
-            var segmnet = new ArraySegment<byte>(byteMessage);
+            var segment = new ArraySegment<byte>(byteMessage);
 
-            return socket.SendAsync(segmnet, WebSocketMessageType.Text, true, token);
+            return socket.SendAsync(segment, WebSocketMessageType.Text, true, token);
         }
 
         readonly RequestDelegate requestDelegate;
